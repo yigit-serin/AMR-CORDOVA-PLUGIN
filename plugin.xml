@@ -95,14 +95,6 @@
             <string>Some ad content may access calendar</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="AppLovinSdkKey">
-            <string>YOUR_KEY</string>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="GADApplicationIdentifier">
-            <string>YOUR_KEY</string>
-        </config-file>
-
         <header-file src="src/ios/CDVAmr.h" />
         <source-file src="src/ios/CDVAmr.m" />
 
