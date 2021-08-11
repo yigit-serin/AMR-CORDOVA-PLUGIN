@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSString *subjectToGdpr;
 @property (nonatomic, retain) NSString *subjectToCCPA;
 
+@property (assign) float webViewHeight;
 @property (assign) float bannerWidth;
 @property (assign) BOOL bannerAtTop;
 @property (assign) BOOL offsetTopBar;
