@@ -474,6 +474,11 @@
     CGFloat top = isIOS7 ? MIN(sf.size.height, sf.size.width) : 0.0;
     if(! self.offsetTopBar) top = 0.0;
     
+    //Get original size of webview frame height
+    if(!_webViewHeight){
+        _webViewHeight = wf.size.height;
+    }
+    
     wf.origin.y = top;
     wf.size.height = pr.size.height - top;
     
@@ -505,6 +510,11 @@
             
             bf.origin.x = (pr.size.width - bf.size.width) * 0.5f;
             _banner.bannerView.frame = bf;
+        } else {
+            //if banner removed and _webViewHeight set, set original webview frame height
+            if(_webViewHeight){
+                wf.size.height = _webViewHeight;
+            }
         }
     }
     self.webView.frame = wf;
