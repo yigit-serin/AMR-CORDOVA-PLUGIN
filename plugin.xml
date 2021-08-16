@@ -110,9 +110,5 @@
         <framework src="AMRAdapterOgury" type="podspec" spec="~> 1.4" />
         <framework src="AMRAdapterTapjoy" type="podspec" spec="~> 12.6" />
         <framework src="AMRAdapterUnity" type="podspec" spec="~> 3.7" />
-        <framework src="AMRAdapterVungle" type="podspec" spec="~> 6.7" />
-        <framework src="AMRAdapterYandex" type="podspec" spec="~> 2.16" />
-        <framework src="AMRAdapterYouappi" type="podspec" spec="~> 5.0" />
-
     </platform>
 </plugin>
