@@ -15,7 +15,7 @@ dependencies{
     implementation 'com.admost.sdk:cordova-plugin:1.2.8'
     
     implementation 'com.android.volley:volley:1.1.1' 
-    implementation 'com.admost.sdk:amr:2.3.4' 
+    implementation 'com.admost.sdk:amr:2.3.6' 
     implementation 'com.google.android.gms:play-services-base:17.1.0' 
     
     implementation 'com.admost.sdk:admost:1.0.2.a25' 
