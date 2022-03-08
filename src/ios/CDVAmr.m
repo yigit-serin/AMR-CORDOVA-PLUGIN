@@ -276,11 +276,11 @@
     if (show) {
         if (_bannerIsAvaliable && !_bannerIsVisible) {
             
-            UIView* parentView = _overlap ? self.webView : [self.webView superview];
+            //UIView* parentView = _overlap ? self.webView : [self.webView superview];
+            //[parentView addSubview:_banner.bannerView];
+            //[parentView bringSubviewToFront:_banner.bannerView];
             
-            [parentView addSubview:_banner.bannerView];
-            [parentView bringSubviewToFront:_banner.bannerView];
-            
+            [[UIApplication sharedApplication].keyWindow addSubview:_banner.bannerView];
             _bannerIsVisible = YES;
         }
     } else {
