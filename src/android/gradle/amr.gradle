@@ -31,7 +31,7 @@ dependencies{
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.32'
     implementation 'com.admost.sdk:unity:4.0.0.a28'
     implementation 'com.vungle:publisher-sdk-android:6.10.3'
-    implementation 'com.admost.sdk:vungle-adapter:6.10.3.a28'
+    //implementation 'com.admost.sdk:vungle-adapter:6.10.3.a28'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //implementation 'com.admost.sdk:yandex:4.5.0.a28'
     //implementation 'com.yandex.android:mobmetricalib:4.0.0'
