@@ -26,7 +26,11 @@ dependencies{
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'com.admost.sdk:huawei-ads-adapter:3.4.49.301.a28'
-    implementation 'com.huawei.hms:ads:3.4.49.301'
+    implementation 'com.huawei.hms:ads-lite:13.4.53.300' 
+    implementation 'com.huawei.hms:ads-identifier:3.4.46.300' 
+    
+    //implementation 'com.huawei.hms:ads:3.4.49.301'
+    
     implementation 'com.admost.sdk:ironsource:7.1.13.1.a28'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.32'
     implementation 'com.admost.sdk:unity:4.0.0.a28'
