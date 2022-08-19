@@ -42,7 +42,7 @@
                 </receiver>
             </config-file>
             <config-file target="AndroidManifest.xml" parent="/manifest/application">
-                <receiver android:enabled="true" android:name="com.amr.cordova.Amr$EventListener">
+                <receiver android:enabled="true" android:name="com.amr.cordova.Amr$EventListener" android:exported="true">
                     <intent-filter>
                         <action android:name="com.amr.plugin.cordova.CALLBACK" />
                     </intent-filter>
@@ -57,7 +57,8 @@
                 android:process=":adprocess"
                 android:multiprocess="true"
                 android:screenOrientation="landscape"
-                android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen" >
+                android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen" 
+		android:exported="true">
                 <intent-filter>
                     <action android:name="android.intent.action.VIEW" />
 
