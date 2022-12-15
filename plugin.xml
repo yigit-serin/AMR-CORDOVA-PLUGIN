@@ -34,7 +34,7 @@
                 <uses-permission android:name="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE"/>
             </config-file>
             <config-file target="AndroidManifest.xml" parent="/manifest/application">
-                <receiver android:enabled="true" android:name="com.amr.cordova.Amr$EventListener">
+                <receiver android:enabled="true" android:exported="true" android:name="com.amr.cordova.Amr$EventListener">
                     <intent-filter>
                         <action android:name="com.amr.plugin.cordova.CALLBACK" />
                     </intent-filter>
@@ -48,6 +48,7 @@
                 android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
                 android:process=":adprocess"
                 android:multiprocess="true"
+		android:exported="true"
                 android:screenOrientation="landscape"
                 android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen" >
                 <intent-filter>
@@ -90,14 +91,20 @@
         <header-file src="src/ios/CDVAmr.h" />
         <source-file src="src/ios/CDVAmr.m" />
 
-        <framework src="AMRAdapterAdcolony" type="podspec" spec="~> 4.6" />
-        <framework src="AMRAdapterAdmob" type="podspec" spec="> 7.62" />
-        <framework src="AMRAdapterAdmost" type="podspec" spec="~> 1.3" />
-        <framework src="AMRAdapterApplovin" type="podspec" spec="~> 10.3" />
-        <framework src="AMRAdapterDFP" type="podspec" spec="> 7.62" />
-        <framework src="AMRAdapterFacebook" type="podspec" spec="> 5.9" />
-        <framework src="AMRAdapterIronsource" type="podspec" spec="~> 7.1" />
-        <framework src="AMRAdapterUnity" type="podspec" spec="~> 3.7" />
+	<podspec>
+		<config>
+			<source url="https://cdn.cocoapods.org/"/>
+		</config>
+		<pods>
+			<pod name="AMRAdapterAdmob" spec="~> 4.9" />
+			<pod name="AMRAdapterAdmob" spec="~> 9.13" />
+			<pod name="AMRAdapterAdmost" spec="~> 1.6" />
+			<pod name="AMRAdapterApplovin" spec="~> 11.6" />
+			<pod name="AMRAdapterFacebook" spec="~> 6.12" />
+			<pod name="AMRAdapterIronsource" spec="~> 7.2" />
+			<pod name="AMRAdapterUnity" spec="~> 4.4" />
+		</pods>
+	</podspec>
 
 
     </platform>
