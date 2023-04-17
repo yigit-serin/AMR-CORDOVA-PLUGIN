@@ -96,7 +96,6 @@
 			<source url="https://cdn.cocoapods.org/"/>
 		</config>
 		<pods>
-			<pod name="AMRAdapterAdmob" spec="~> 4.9" />
 			<pod name="AMRAdapterAdmob" spec="~> 9.13" />
 			<pod name="AMRAdapterAdmost" spec="~> 1.6" />
 			<pod name="AMRAdapterApplovin" spec="~> 11.6" />
