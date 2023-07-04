@@ -104,7 +104,7 @@
 			<pod name="AMRAdapterIronsource" spec="~> 7.3" />
 			<pod name="AMRAdapterTiktok" spec="~> 5.2" />
 			<pod name="AMRAdapterUnity" spec="~> 4.7" />
-			<pod name="AMRAdapterVungle" spec="~> 7.0" />
+			<pod name="AMRAdapterVungle" spec="~> 6.0" />
 		</pods>
 	</podspec>
 
