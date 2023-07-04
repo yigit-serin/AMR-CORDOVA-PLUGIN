@@ -26,6 +26,7 @@ dependencies{
     implementation 'com.admost.sdk:facebook-adapter:6.12.0.a35' 
     implementation 'com.admost.sdk:ironsource-adapter:7.3.0.a35' 
     implementation 'com.admost.sdk:unity-adapter:4.4.1.a35' 
+    implementation 'com.admost.sdk:tiktok-adapter:5.0.1.1.a35' 
     
     implementation 'com.admost.sdk:vungle-adapter:6.12.1.a35'
     //vungle dependencies
