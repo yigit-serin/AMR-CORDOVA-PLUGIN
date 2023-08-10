@@ -97,7 +97,7 @@
 		</config>
 		<pods>
 			<pod name="AMRAdapterAdcolony" spec="~> 4.9" />
-			<pod name="AMRAdapterAdmob" spec="~> 10.6" />
+			<pod name="AMRAdapterAdmob" spec="~> 10.9" />
 			<pod name="AMRAdapterAdmost" spec="~> 1.6" />
 			<pod name="AMRAdapterApplovin" spec="~> 11.9" />
 			<pod name="AMRAdapterFacebook" spec="~> 6.12" />
