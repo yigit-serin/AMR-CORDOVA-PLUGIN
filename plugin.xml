@@ -79,10 +79,8 @@
         </config-file>
 
         <config-file target="*-Info.plist" parent="NSAppTransportSecurity">
-            <dict>
-                <key>NSAllowsArbitraryLoads</key>
-                <true/>
-            </dict>
+	    <key>NSAllowsArbitraryLoads</key>
+	    <true/>
         </config-file>
         <config-file target="*-Info.plist" parent="NSCalendarsUsageDescription">
             <string>Some ad content may access calendar</string>
