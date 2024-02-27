@@ -45,26 +45,24 @@ function(config, successCallback, failureCallback) {
 	);
 };
 
-amrExport.startTestSuite =
-function(config, successCallback, failureCallback) {
-	cordova.exec(
-					successCallback,
-					failureCallback,
-					'Amr',
-					'startTestSuite',
-					[ config ]
-					);
-};
-
-	
-amrExport.loadBanner =
-function(config, successCallback, failureCallback) {
-	if(typeof config === 'undefined' || config == null) config = {};
+amrExport.isPrivacyConsentRequired =
+function (successCallback, failureCallback){
 	cordova.exec(
 		successCallback,
 		failureCallback,
 		'Amr',
-		'loadBanner',
+		'isPrivacyConsentRequired',
+		[]
+	);
+};
+
+amrExport.startTestSuite =
+function(config, successCallback, failureCallback) {
+	cordova.exec(
+		successCallback,
+		failureCallback,
+		'Amr',
+		'startTestSuite',
 		[ config ]
 	);
 };
@@ -80,6 +78,28 @@ function(successCallback, failureCallback) {
 		[]
 		
 	);
+
+amrExport.setCanRequestAds =
+function (config, successCallback, failureCallback) {
+  cordova.exec(
+  		successCallback,
+	  	failureCallback,
+	  	"Amr",
+	  	"setCanRequestAds",
+	  	[config]
+  );
+};
+
+amrExport.loadBanner =
+function (config, successCallback, failureCallback) {
+  if (typeof config === "undefined" || config == null) config = {};
+  cordova.exec(
+  		successCallback,
+	  	failureCallback,
+	  	"Amr",
+	  	"loadBanner",
+	  	[config]
+  );
 };
 
 
