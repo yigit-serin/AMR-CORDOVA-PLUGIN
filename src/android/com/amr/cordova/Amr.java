@@ -31,6 +31,8 @@ import admost.sdk.AdMostView;
 import admost.sdk.base.AdMost;
 import admost.sdk.base.AdMostAdNetwork;
 import admost.sdk.base.AdMostConfiguration;
+import admost.sdk.base.AdMostLog;
+import admost.sdk.base.AdMostRemoteConfig;
 import admost.sdk.listener.AdMostAdListener;
 import admost.sdk.listener.AdMostInitListener;
 import admost.sdk.listener.AdMostViewListener;
@@ -66,6 +68,8 @@ public class Amr extends CordovaPlugin {
 
     private static final String ACTION_TRACK_PURCHASE_FOR_ANDROID = "trackPurchaseForAndroid";
     private static final String ACTION_IS_PRIVACY_CONSENT_REQUIRED = "isPrivacyConsentRequired";
+    private static final String ACTION_GET_REMOTE_CONFIG_STRING = "remoteConfig";
+
 
     /**
      * config
@@ -124,8 +128,6 @@ public class Amr extends CordovaPlugin {
     private static String onBannerFail = "onBannerFail";
     private static String onBannerReady = "onBannerReady";
     private static String onBannerLoad = "onBannerLoad";
-
-    private static String isPrivacyConsentRequired = "isPrivacyConsentRequired";
 
     private ViewGroup parentView;
 
@@ -224,7 +226,7 @@ public class Amr extends CordovaPlugin {
             result = executeLoadRewardedVideo(config, callbackContext);
 
         } else if (ACTION_SHOW_REWARDED_VIDEO.equals(action)) {
-            result = executeShowRewardedVideo(callbackContext);
+            result = executeShowRewardedVideo("", callbackContext);
 
         } else if (ACTION_DESTROY_REWARDED_VIDEO.equals(action)) {
             result = executeDestroyRewardedVideo(callbackContext);
@@ -254,7 +256,7 @@ public class Amr extends CordovaPlugin {
             result = executeGetRemoteConfigString(config, callbackContext);
         } else if(ACTION_TRACK_PURCHASE_FOR_ANDROID.equals(action)){
             JSONObject config = inputs.optJSONObject(0);
-            result = executeTrackPurchaseForAndroid(config, callbackContext);
+//             result = executeTrackPurchaseForAndroid(config, callbackContext);
         } else {
             Log.d(LOGTAG, String.format("Invalid action passed: %s", action));
             result = new PluginResult(Status.INVALID_ACTION);
@@ -306,7 +308,7 @@ public class Amr extends CordovaPlugin {
         this.AMRSdkConfig(config);
 
         if (this.amrAppId.length() < 5) {
-            Log.e(LOGTAG, "Please set applicationIdAndroid parameter.");
+            AdMostLog.e(LOGTAG, new Throwable("Please set applicationIdAndroid parameter."));
             return null;
         }
         cordova.getActivity().runOnUiThread(new Runnable() {
@@ -369,7 +371,7 @@ public class Amr extends CordovaPlugin {
         this.AMRSdkConfig(config);
 
         if (this.amrBannerZoneId.length() < 5) {
-            Log.e(LOGTAG, "Please set bannerIdAndroid parameter.");
+            AdMostLog.e(LOGTAG, new Throwable("Please set bannerIdAndroid parameter."));
             return null;
         }
 
@@ -408,7 +410,7 @@ public class Amr extends CordovaPlugin {
     }
 
     private PluginResult executeIsPrivacyConsentRequired(){
-        AdMost.getInstance().setPrivacyConsentListener(Layout.this, new AdMost.PrivacyConsentListener() {
+        AdMost.getInstance().setPrivacyConsentListener(this.cordova.getActivity().getApplicationContext(), new AdMost.PrivacyConsentListener() {
             @Override
             public void isPrivacyConsentRequired(String status) {
                 cordova.getActivity().runOnUiThread(new Runnable() {
@@ -479,7 +481,7 @@ public class Amr extends CordovaPlugin {
         this.AMRSdkConfig(config);
 
         if (this.amrInterstitialZoneId.length() < 5) {
-            Log.e(LOGTAG, "Please set interstitialIdAndroid parameter.");
+            AdMostLog.e(LOGTAG, new Throwable("Please set interstitialIdAndroid parameter."));
             return null;
         }
         cordova.getActivity().runOnUiThread(new Runnable() {
@@ -541,7 +543,7 @@ public class Amr extends CordovaPlugin {
         this.AMRSdkConfig(config);
 
         if (this.amrVideoZoneId.length() < 5) {
-            Log.e(LOGTAG, "Please set videoIdAndroid parameter.");
+            AdMostLog.e(LOGTAG, new Throwable("Please set videoIdAndroid parameter."));
             return null;
         }
         cordova.getActivity().runOnUiThread(new Runnable() {
@@ -600,7 +602,7 @@ public class Amr extends CordovaPlugin {
     private PluginResult executeShowRewardedVideoWithActivity(final JSONObject config, final CallbackContext callbackContext) {
         this.AMRSdkConfig(config);
         if (this.amrVideoZoneId.length() < 5) {
-            Log.e(LOGTAG, "Please set videoIdAndroid parameter.");
+            AdMostLog.e(LOGTAG, new Throwable("Please set videoIdAndroid parameter."));
             return null;
         }
         cordova.setActivityResultCallback(this);
@@ -630,7 +632,7 @@ public class Amr extends CordovaPlugin {
         this.AMRSdkConfig(config);
 
         if (this.amrInterstitialZoneId.length() < 5) {
-            Log.e(LOGTAG, "Please set videoIdAndroid parameter.");
+            AdMostLog.e(LOGTAG, new Throwable("Please set videoIdAndroid parameter."));
             return null;
         }
         cordova.setActivityResultCallback(this);
@@ -748,9 +750,9 @@ public class Amr extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(adView == null || adView.getView() == null){
-                    return new PluginResult(Status.ERROR, "adView is null, call createBannerView first.");
-                }
+//                 if(adView == null || adView.getView() == null){
+//                     return new PluginResult(Status.ERROR, "adView is null, call createBannerView first.");
+//                 }
                 if (bannerVisible == bannerShow) { // no change
 
                 } else if (bannerShow) {
@@ -847,7 +849,7 @@ public class Amr extends CordovaPlugin {
                     Log.v(LOGTAG, "Interstital is loaded");
                     interstitialAd.show();
                 } else {
-                    Log.e(LOGTAG, "Interstital not ready yet, temporarily setting autoshow.");
+                    AdMostLog.e(LOGTAG, new Throwable("Interstital not ready yet, temporarily setting autoshow."));
                     autoShowInterstitialTemp = true;
                 }
 
@@ -904,7 +906,7 @@ public class Amr extends CordovaPlugin {
                 if (videoAd.isLoaded()) {
                     videoAd.show(tag);
                 } else {
-                    Log.e(LOGTAG, "VideoAd is not ready yet, temporarily setting autoshow.");
+                    AdMostLog.e(LOGTAG, new Throwable("VideoAd is not ready yet, temporarily setting autoshow."));
                     autoShowVideoTemp = true;
                 }
 
