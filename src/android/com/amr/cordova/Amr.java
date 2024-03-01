@@ -894,7 +894,6 @@ public class Amr extends CordovaPlugin {
 
     private PluginResult executeShowRewardedVideo(String tag, final CallbackContext callbackContext) {
         Log.v(LOGTAG, "Show Video Ad");
-        Log.v(LOGTAG, tag);
         if (videoAd == null) {
             return new PluginResult(Status.ERROR, "VideoAd is null, call createVideoView first.");
         }
