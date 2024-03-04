@@ -100,7 +100,7 @@
     
     if (command.arguments.count > 0) {
             NSDictionary* params = [command argumentAtIndex:0 withDefault:[NSNull null]];
-            [self __setOptions:params.];
+            [self __setOptions:params];
 
         if (_canRequestAds != nil) {
             BOOL canRequestAds = [_canRequestAds isEqualToString:@"1"] ? YES:NO;
