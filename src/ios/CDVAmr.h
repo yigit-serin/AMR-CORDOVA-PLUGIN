@@ -19,10 +19,10 @@
 @property (nonatomic, retain) NSString *videoZoneId;
 
 @property (nonatomic, retain) NSString *userConsent;
+@property (nonatomic, retain) NSString *canRequestAds;
 @property (nonatomic, retain) NSString *subjectToGdpr;
 @property (nonatomic, retain) NSString *subjectToCCPA;
 
-@property (assign) float webViewHeight;
 @property (assign) float bannerWidth;
 @property (assign) BOOL bannerAtTop;
 @property (assign) BOOL offsetTopBar;
@@ -34,6 +34,7 @@
 
 - (void)AMRSdkConfig:(CDVInvokedUrlCommand*)command;
 - (void)startWithConfig:(CDVInvokedUrlCommand*)command;
+- (void)setCanRequestAds:(CDVInvokedUrlCommand*)command;
 - (void)startTestSuite:(CDVInvokedUrlCommand*)command;
 
 - (void)loadBanner:(CDVInvokedUrlCommand*)command;
