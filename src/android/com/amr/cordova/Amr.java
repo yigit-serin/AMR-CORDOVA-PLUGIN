@@ -749,79 +749,79 @@ public class Amr extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                 if(adView == null || adView.getView() == null){
-//                     return new PluginResult(Status.ERROR, "adView is null, call createBannerView first.");
-//                 }
-                if (bannerVisible == bannerShow) { // no change
+                  try {
+                    if (bannerVisible == bannerShow) { // no change
 
-                } else if (bannerShow) {
-                    if (adView.getView().getParent() != null) {
-                        ((ViewGroup) adView.getView().getParent()).removeView(adView.getView());
-                    }
-                    if (bannerOverlap) {
-                        RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
-                                RelativeLayout.LayoutParams.MATCH_PARENT,
-                                RelativeLayout.LayoutParams.WRAP_CONTENT);
-                        params2.addRule(bannerAtTop ? RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
-
-                        if (adViewLayout == null) {
-                            adViewLayout = new RelativeLayout(cordova.getActivity());
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                            try {
-                                ((ViewGroup) (((View) webView.getClass().getMethod("getView").invoke(webView)).getParent())).addView(adViewLayout, params);
-                            } catch (Exception e) {
-                                ((ViewGroup) webView).addView(adViewLayout, params);
-                            }
+                    } else if (bannerShow) {
+                        if (adView.getView() != null && adView.getView().getParent() != null) {
+                            ((ViewGroup) adView.getView().getParent()).removeView(adView.getView());
                         }
+                        if (bannerOverlap) {
+                            RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
+                                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+                            params2.addRule(bannerAtTop ? RelativeLayout.ALIGN_PARENT_TOP : RelativeLayout.ALIGN_PARENT_BOTTOM);
 
-                        adViewLayout.addView(adView.getView(), params2);
-                        adViewLayout.bringToFront();
-                    } else {
-                        if (CORDOVA_MIN_4) {
-                            ViewGroup wvParentView = (ViewGroup) getWebView().getParent();
-                            if (parentView == null) {
-                                parentView = new LinearLayout(webView.getContext());
-                            }
-                            if (wvParentView != null && wvParentView != parentView) {
-                                wvParentView.removeView(getWebView());
-                                ((LinearLayout) parentView).setOrientation(LinearLayout.VERTICAL);
-                                parentView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.0F));
-                                getWebView().setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0F));
-                                parentView.addView(getWebView());
-                                cordova.getActivity().setContentView(parentView);
+                            if (adViewLayout == null) {
+                                adViewLayout = new RelativeLayout(cordova.getActivity());
+                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                                try {
+                                    ((ViewGroup) (((View) webView.getClass().getMethod("getView").invoke(webView)).getParent())).addView(adViewLayout, params);
+                                } catch (Exception e) {
+                                    ((ViewGroup) webView).addView(adViewLayout, params);
+                                }
                             }
 
+                            adViewLayout.addView(adView.getView(), params2);
+                            adViewLayout.bringToFront();
                         } else {
-                            parentView = (ViewGroup) ((ViewGroup) webView).getParent();
+                            if (CORDOVA_MIN_4) {
+                                ViewGroup wvParentView = (ViewGroup) getWebView().getParent();
+                                if (parentView == null) {
+                                    parentView = new LinearLayout(webView.getContext());
+                                }
+                                if (wvParentView != null && wvParentView != parentView) {
+                                    wvParentView.removeView(getWebView());
+                                    ((LinearLayout) parentView).setOrientation(LinearLayout.VERTICAL);
+                                    parentView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.0F));
+                                    getWebView().setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0F));
+                                    parentView.addView(getWebView());
+                                    cordova.getActivity().setContentView(parentView);
+                                }
+
+                            } else {
+                                parentView = (ViewGroup) ((ViewGroup) webView).getParent();
+                            }
+
+                            if (bannerAtTop) {
+                                parentView.addView(adView.getView(), 0);
+                            } else {
+                                parentView.addView(adView.getView());
+                            }
+                            parentView.bringToFront();
+                            parentView.requestLayout();
                         }
 
-                        if (bannerAtTop) {
-                            parentView.addView(adView.getView(), 0);
+                        adView.getView().setVisibility(View.VISIBLE);
+                        bannerVisible = true;
+                        if (bannerShow == true) {
+                            sendResponseToListener(onBannerShown, null);
                         } else {
-                            parentView.addView(adView.getView());
+                            sendResponseToListener(onBannerHide, null);
+
                         }
-                        parentView.bringToFront();
-                        parentView.requestLayout();
-                    }
 
-                    adView.getView().setVisibility(View.VISIBLE);
-                    bannerVisible = true;
-                    if (bannerShow == true) {
-                        sendResponseToListener(onBannerShown, null);
+
                     } else {
-                        sendResponseToListener(onBannerHide, null);
-
+                        adView.getView().setVisibility(View.GONE);
+                        bannerVisible = false;
                     }
-
-
-                } else {
-                    adView.getView().setVisibility(View.GONE);
-                    bannerVisible = false;
+                  } catch (Exception e){
+                    AdMostLog.e(LOGTAG, new Throwable("executeShowBanner try catch"));
+                  }
+                  if (callbackContext != null) callbackContext.success();
                 }
-
-                if (callbackContext != null) callbackContext.success();
-            }
-        });
+            });
 
         return null;
     }
