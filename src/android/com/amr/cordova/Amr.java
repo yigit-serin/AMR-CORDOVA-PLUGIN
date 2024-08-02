@@ -750,9 +750,7 @@ public class Amr extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                 if(adView == null || adView.getView() == null){
-//                     return new PluginResult(Status.ERROR, "adView is null, call createBannerView first.");
-//                 }
+            try {
                 if (bannerVisible == bannerShow) { // no change
 
                 } else if (bannerShow) {
@@ -818,6 +816,10 @@ public class Amr extends CordovaPlugin {
                 } else {
                     adView.getView().setVisibility(View.GONE);
                     bannerVisible = false;
+                }
+
+                } catch (Exception e){
+                  AdMostLog.e(LOGTAG, new Throwable("executeShowBanner try catch"));
                 }
 
                 if (callbackContext != null) callbackContext.success();

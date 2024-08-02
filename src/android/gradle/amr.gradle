@@ -45,17 +45,9 @@ dependencies{
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
     defaultConfig {
-        minSdkVersion 19
         multiDexEnabled true
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
   packagingOptions {
     exclude 'META-INF/NOTICE'
     exclude 'META-INF/LICENSE'
