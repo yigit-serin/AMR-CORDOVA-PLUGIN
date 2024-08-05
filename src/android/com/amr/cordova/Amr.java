@@ -754,7 +754,7 @@ public class Amr extends CordovaPlugin {
                 if (bannerVisible == bannerShow) { // no change
 
                 } else if (bannerShow) {
-                    if (adView.getView().getParent() != null) {
+                    if (adView.getView() != null && adView.getView().getParent() != null) {
                         ((ViewGroup) adView.getView().getParent()).removeView(adView.getView());
                     }
                     if (bannerOverlap) {
