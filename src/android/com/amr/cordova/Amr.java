@@ -460,8 +460,8 @@ public class Amr extends CordovaPlugin {
             @Override
             public void run() {
                 if (adView != null) {
-                    ViewGroup parentView = (ViewGroup) adView.getView().getParent();
-                    if (parentView != null) {
+                    if (adView.getView() != null && adView.getView().getParent() != null) {
+                        ViewGroup parentView = (ViewGroup) adView.getView().getParent();
                         parentView.removeView(adView.getView());
                     }
                     adView.destroy();
