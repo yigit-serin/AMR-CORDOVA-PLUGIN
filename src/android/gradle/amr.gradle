@@ -13,20 +13,19 @@ dependencies{
     // Base( Required)
     implementation 'com.admost.sdk:cordova-plugin:1.2.9'
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.admost.sdk:amr:2.9.7'
+    implementation 'com.admost.sdk:amr:3.1.0'
 
-    implementation 'com.google.android.gms:play-services-base:17.1.0'
+    implementation 'com.google.android.gms:play-services-base:18.5.0'
     implementation 'com.google.android.gms:play-services-ads:23.0.0'
 
-    implementation 'com.admost.sdk:admost-adapter:1.1.8.a44'
-    implementation 'com.admost.sdk:admob-adapter:23.0.0.a44'
-    implementation 'com.admost.sdk:applovin-adapter:12.1.0.a44'
-    implementation 'com.admost.sdk:facebook-adapter:6.16.0.a44'
-    implementation 'com.admost.sdk:ironsource-adapter:7.8.0.a44'
-    implementation 'com.admost.sdk:tiktok-adapter:5.8.0.8.a44'
-    implementation 'com.admost.sdk:unity-adapter:4.9.2.2.a44'
+    implementation 'com.admost.sdk:admost-adapter:1.1.8.a47'
+    implementation 'com.admost.sdk:admob-adapter:23.0.2.a47'
+    implementation 'com.admost.sdk:applovin-adapter:12.6.1.a47'
+    implementation 'com.admost.sdk:facebook-adapter:6.17.0.1.a47'
+    implementation 'com.admost.sdk:tiktok-adapter:6.2.0.5.a47'
+    implementation 'com.admost.sdk:unity-adapter:4.12.2.a47'
 
-    implementation 'com.admost.sdk:vungle-adapter:7.1.0.a44'
+    implementation 'com.admost.sdk:vungle-adapter:7.4.0.a47'
     //vungle dependencies
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.google.android.gms:play-services-tasks:18.0.1'
