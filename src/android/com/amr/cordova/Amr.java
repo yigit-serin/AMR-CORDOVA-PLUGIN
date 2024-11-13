@@ -30,6 +30,7 @@ import admost.sdk.AdMostManager;
 import admost.sdk.AdMostView;
 import admost.sdk.base.AdMost;
 import admost.sdk.base.AdMostAdNetwork;
+import admost.sdk.base.AdMostBannerHeight;
 import admost.sdk.base.AdMostConfiguration;
 import admost.sdk.base.AdMostLog;
 import admost.sdk.base.AdMostRemoteConfig;
@@ -153,7 +154,7 @@ public class Amr extends CordovaPlugin {
     private String amrInterstitialZoneId = "";
     private String amrBannerZoneId = "";
     private String amrVideoZoneId = "";
-    private int adSize = AdMostManager.getInstance().AD_BANNER;
+    private int adSize = AdMostBannerHeight.AD_BANNER;
 
 
     /**
