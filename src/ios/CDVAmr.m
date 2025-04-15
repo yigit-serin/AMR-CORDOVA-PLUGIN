@@ -504,8 +504,7 @@
     wf.size.height = pr.size.height - top;
 
     CGRect bf = CGRectZero;
-    BOOL shouldAdjustBanner = (_banner && _bannerIsVisible);
-    if (shouldAdjustBanner) {
+    if (_banner) {
         bf = _banner.bannerView.frame;
         if( _bannerIsVisible ) {
             //NSLog( @"banner visible" );
@@ -532,7 +531,14 @@
             if(!_overlap) wf.size.height -= bf.size.height;
             
             bf.origin.x = (pr.size.width - bf.size.width) * 0.5f;
-            _banner.bannerView.frame = bf;
+          
+          [UIView animateWithDuration:0.25
+                  delay:0.0
+                  options:UIViewAnimationOptionCurveEaseInOut
+                  animations:^{
+                        _banner.bannerView.frame = bf;
+                   }
+            completion:nil];
         } else {
             //if banner removed and _webViewHeight set, set original webview frame height
             if(_webViewHeight){
@@ -540,19 +546,10 @@
             }
         }
     }
-    //self.webView.frame = wf;
+    self.webView.frame = wf;
 
     // Animate layout changes
-    [UIView animateWithDuration:0.25
-            delay:0.0
-            options:UIViewAnimationOptionCurveEaseInOut
-            animations:^{
-                 if (shouldAdjustBanner) {
-                     _banner.bannerView.frame = bf;
-                 }
-                 self.webView.frame = wf;
-             }
-      completion:nil];
+
 }
     
 @end
