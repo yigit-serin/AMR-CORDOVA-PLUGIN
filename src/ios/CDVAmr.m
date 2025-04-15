@@ -502,9 +502,11 @@
     
     wf.origin.y = top;
     wf.size.height = pr.size.height - top;
-    
-    if(_banner) {
-        CGRect bf = _banner.bannerView.frame;
+
+    CGRect bf = CGRectZero;
+    BOOL shouldAdjustBanner = (_banner && _bannerIsVisible);
+    if (shouldAdjustBanner) {
+        bf = _banner.bannerView.frame;
         if( _bannerIsVisible ) {
             //NSLog( @"banner visible" );
             
