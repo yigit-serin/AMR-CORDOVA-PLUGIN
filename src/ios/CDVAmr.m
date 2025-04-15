@@ -384,6 +384,7 @@
     
 -(void)didDismissInterstitial:(AMRInterstitial *)interstitial {
     [self fireEvent:@"onInterstitialDismiss" withData:nil];
+    [self resizeContent];
 }
 
 - (void)didInterstitialStateChanged:(AMRInterstitial *)interstitial state:(AMRAdState)state {
@@ -414,6 +415,7 @@
     
 - (void)didDismissRewardedVideo:(AMRRewardedVideo *)rewardedVideo {
     [self fireEvent:@"onVideoDismiss" withData:nil];
+    [self resizeContent];
 }
     
 - (void)didCompleteRewardedVideo:(AMRRewardedVideo *)rewardedVideo {
@@ -530,7 +532,18 @@
             _banner.bannerView.frame = bf;
         }
     }
-    self.webView.frame = wf;
+
+    // Animate layout changes
+    [UIView animateWithDuration:0.25
+            delay:0.0
+            options:UIViewAnimationOptionCurveEaseInOut
+            animations:^{
+                 if (shouldAdjustBanner) {
+                     _banner.bannerView.frame = bf;
+                 }
+                 self.webView.frame = wf;
+             }
+      completion:nil];
 }
     
 @end
