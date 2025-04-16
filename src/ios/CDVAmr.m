@@ -72,10 +72,12 @@
             BOOL consent = [_userConsent isEqualToString:@"1"] ? YES:NO;
             [AMRSDK setUserConsent:consent];
         }
+        
          if (_canRequestAds != nil) {
             BOOL canRequestAds = [_canRequestAds isEqualToString:@"1"] ? YES:NO;
             [AMRSDK canRequestAds: canRequestAds];
         }
+
         if (_subjectToGdpr != nil) {
             BOOL gdpr = [_subjectToGdpr isEqualToString:@"1"] ? YES:NO;
             [AMRSDK subjectToGDPR:gdpr];
@@ -92,9 +94,10 @@
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+
 - (void)setCanRequestAds:(CDVInvokedUrlCommand*)command {
     NSLog(@"<AMRSDK> setCanRequestAds");
-
+    
     if (command.arguments.count > 0) {
             NSDictionary* params = [command argumentAtIndex:0 withDefault:[NSNull null]];
             [self __setOptions:params];
@@ -105,6 +108,7 @@
         }
     }
 }
+    
 - (void)startTestSuite:(CDVInvokedUrlCommand*)command {
     NSLog(@"<AMRSDK> startTestSuite");
     
@@ -292,11 +296,11 @@
     if (show) {
         if (_bannerIsAvaliable && !_bannerIsVisible) {
             
-            //UIView* parentView = _overlap ? self.webView : [self.webView superview];
-            //[parentView addSubview:_banner.bannerView];
-            //[parentView bringSubviewToFront:_banner.bannerView];
+            UIView* parentView = _overlap ? self.webView : [self.webView superview];
             
-            [[UIApplication sharedApplication].keyWindow addSubview:_banner.bannerView];
+            [parentView addSubview:_banner.bannerView];
+            [parentView bringSubviewToFront:_banner.bannerView];
+            
             _bannerIsVisible = YES;
         }
     } else {
@@ -458,7 +462,7 @@
 
     str = [options objectForKey:@"canRequestAds"];
     if(str && [str length]>0) _canRequestAds = str;
-
+    
     str = [options objectForKey:@"subjectToGdpr"];
     if(str && [str length]>0) _subjectToGdpr = str;
     
@@ -495,17 +499,11 @@
     CGFloat top = isIOS7 ? MIN(sf.size.height, sf.size.width) : 0.0;
     if(! self.offsetTopBar) top = 0.0;
     
-    //Get original size of webview frame height
-    if(!_webViewHeight){
-        _webViewHeight = wf.size.height;
-    }
-    
     wf.origin.y = top;
     wf.size.height = pr.size.height - top;
-
-    CGRect bf = CGRectZero;
-    if (_banner) {
-        bf = _banner.bannerView.frame;
+    
+    if(_banner) {
+        CGRect bf = _banner.bannerView.frame;
         if( _bannerIsVisible ) {
             //NSLog( @"banner visible" );
             
@@ -531,25 +529,10 @@
             if(!_overlap) wf.size.height -= bf.size.height;
             
             bf.origin.x = (pr.size.width - bf.size.width) * 0.5f;
-          
-          [UIView animateWithDuration:0.25
-                  delay:0.0
-                  options:UIViewAnimationOptionCurveEaseInOut
-                  animations:^{
-                        _banner.bannerView.frame = bf;
-                   }
-            completion:nil];
-        } else {
-            //if banner removed and _webViewHeight set, set original webview frame height
-            if(_webViewHeight){
-                wf.size.height = _webViewHeight;
-            }
+            _banner.bannerView.frame = bf;
         }
     }
     self.webView.frame = wf;
-
-    // Animate layout changes
-
 }
     
 @end
