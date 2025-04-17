@@ -384,7 +384,6 @@
     
 -(void)didDismissInterstitial:(AMRInterstitial *)interstitial {
     [self fireEvent:@"onInterstitialDismiss" withData:nil];
-    [self resizeContent];
 }
 
 - (void)didInterstitialStateChanged:(AMRInterstitial *)interstitial state:(AMRAdState)state {
@@ -415,7 +414,6 @@
     
 - (void)didDismissRewardedVideo:(AMRRewardedVideo *)rewardedVideo {
     [self fireEvent:@"onVideoDismiss" withData:nil];
-    [self resizeContent];
 }
     
 - (void)didCompleteRewardedVideo:(AMRRewardedVideo *)rewardedVideo {
@@ -492,62 +490,47 @@
 }
     
 - (void)resizeContent {
-
-    NSLog(@"<AMRSDK> resizeContent");
-
     CGRect pr = self.webView.superview.bounds, wf = pr;
-
+    
     BOOL isIOS7 = ([[UIDevice currentDevice].systemVersion floatValue] >= 7);
     CGRect sf = [[UIApplication sharedApplication] statusBarFrame];
     CGFloat top = isIOS7 ? MIN(sf.size.height, sf.size.width) : 0.0;
-    if (!self.offsetTopBar) top = 0.0;
-
+    if(! self.offsetTopBar) top = 0.0;
+    
     wf.origin.y = top;
     wf.size.height = pr.size.height - top;
-
-    CGRect bf = CGRectZero;
-    BOOL shouldAdjustBanner = (_banner && _bannerIsVisible);
-    if (shouldAdjustBanner) {
-        bf = _banner.bannerView.frame;
-
-        if (_bannerAtTop) {
-            if (_overlap) {
+    
+    if(_banner) {
+        CGRect bf = _banner.bannerView.frame;
+        if( _bannerIsVisible ) {
+            //NSLog( @"banner visible" );
+            
+            if(_bannerAtTop) {
+                if(_overlap) {
+                    wf.origin.y = top;
+                    bf.origin.y = 0; // banner is subview of webview
+                } else {
+                    bf.origin.y = top;
+                    wf.origin.y = bf.origin.y + bf.size.height;
+                }
+            } else {
+                // move webview to top
                 wf.origin.y = top;
-                bf.origin.y = 0; // banner is subview of webview
-            } else {
-                bf.origin.y = top;
-                wf.origin.y = bf.origin.y + bf.size.height;
+                
+                if(_overlap) {
+                    bf.origin.y = wf.size.height - bf.size.height; // banner is subview of webview
+                } else {
+                    bf.origin.y = pr.size.height - bf.size.height;
+                }
             }
-        } else {
-            NSLog(@"<AMRSDK> banner at bottom");
-            wf.origin.y = top;
-
-            if (_overlap) {
-                NSLog(@"<AMRSDK> overlap open");
-                bf.origin.y = wf.size.height - bf.size.height; // banner is subview of webview
-            } else {
-                bf.origin.y = pr.size.height - bf.size.height;
-            }
+            
+            if(!_overlap) wf.size.height -= bf.size.height;
+            
+            bf.origin.x = (pr.size.width - bf.size.width) * 0.5f;
+            _banner.bannerView.frame = bf;
         }
-
-        if (!_overlap) {
-            wf.size.height -= bf.size.height;
-        }
-
-        bf.origin.x = (pr.size.width - bf.size.width) * 0.5f;
     }
-
-    // Animate layout changes
-    [UIView animateWithDuration:0.25
-            delay:0.0
-            options:UIViewAnimationOptionCurveEaseInOut
-            animations:^{
-                 if (shouldAdjustBanner) {
-                     _banner.bannerView.frame = bf;
-                 }
-                 self.webView.frame = wf;
-             }
-      completion:nil];
+    self.webView.frame = wf;
 }
     
 @end
