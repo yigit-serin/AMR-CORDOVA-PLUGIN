@@ -95,6 +95,7 @@
             </config>
             <pods>
                 <pod name="AMRAdapterAdmob" spec="~> 11.10" />
+		<pod name="AMRAdapterAdserver" spec="~> 1.1" />
                 <pod name="AMRAdapterAdmost" spec="~> 1.6" />
                 <pod name="AMRAdapterApplovin" spec="~> 13.0" />
                 <pod name="AMRAdapterFacebook" spec="~> 6.15" />
