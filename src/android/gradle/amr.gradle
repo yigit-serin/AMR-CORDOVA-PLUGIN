@@ -19,6 +19,7 @@ dependencies{
     implementation 'com.google.android.gms:play-services-ads:23.0.0'
 
     implementation 'com.admost.sdk:admost-adapter:1.1.8.a47'
+    implementation 'com.admost.sdk:adserver-adapter:1.1.6.a47' 
     implementation 'com.admost.sdk:admob-adapter:23.0.2.a47'
     implementation 'com.admost.sdk:applovin-adapter:12.6.1.a47'
     implementation 'com.admost.sdk:facebook-adapter:6.17.0.1.a47'
