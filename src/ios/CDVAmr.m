@@ -238,6 +238,19 @@
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+
+-(void)destroyInterstitial:(CDVInvokedUrlCommand *)command {
+    NSLog(@"<AMRSDK> destroyInterstitial");
+
+    if(_interstitial) {
+        [_interstitial setDelegate:nil];
+        _interstitial = nil;
+        _interstitialIsAvaliable = NO;
+    }
+
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
     
 -(void)loadRewardedVideo:(CDVInvokedUrlCommand *)command {
     NSLog(@"<AMRSDK> loadRewardedVideo");
