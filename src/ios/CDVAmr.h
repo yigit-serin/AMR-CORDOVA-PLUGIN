@@ -44,6 +44,7 @@
 
 - (void)loadInterstitial:(CDVInvokedUrlCommand*)command;
 - (void)showInterstitial:(CDVInvokedUrlCommand*)command;
+- (void)destroyInterstitial:(CDVInvokedUrlCommand*)command;
 
 - (void)loadRewardedVideo:(CDVInvokedUrlCommand*)command;
 - (void)showRewardedVideo:(CDVInvokedUrlCommand*)command;
