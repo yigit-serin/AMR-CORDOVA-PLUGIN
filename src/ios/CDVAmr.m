@@ -153,7 +153,23 @@
         [self __setOptions:params];
     }
 
-    if(!_banner) {
+    // Eğer banner zaten varsa ve görünürse, önce destroy et
+    if(_banner && _bannerIsVisible) {
+        NSLog(@"<AMRSDK> Banner zaten görünür, önce destroy ediliyor");
+        [_banner setDelegate:nil];
+        [_banner.bannerView removeFromSuperview];
+        _banner = nil;
+        _bannerIsVisible = NO;
+        _bannerIsAvaliable = NO;
+        
+        [self resizeContent];
+        
+        // Kısa bir gecikme ile yeni banner'ı yükle
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self _loadBanner];
+        });
+    } else if(!_banner) {
+      NSLog(@"<AMRSDK> Banner yok load ediliyor.");
         [self _loadBanner];
     } else {
         [_banner loadBanner];
