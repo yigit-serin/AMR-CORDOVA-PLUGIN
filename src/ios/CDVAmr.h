@@ -10,6 +10,7 @@
 
 @property (assign) BOOL bannerIsAvaliable;
 @property (assign) BOOL bannerIsVisible;
+@property (assign) BOOL bannerIsLoading;
 @property (assign) BOOL interstitialIsAvaliable;
 @property (assign) BOOL rewardedVideoIsAvaliable;
 
@@ -44,9 +45,11 @@
 
 - (void)loadInterstitial:(CDVInvokedUrlCommand*)command;
 - (void)showInterstitial:(CDVInvokedUrlCommand*)command;
-- (void)destroyInterstitial:(CDVInvokedUrlCommand*)command;
+ - (void)destroyInterstitial:(CDVInvokedUrlCommand*)command;
 
 - (void)loadRewardedVideo:(CDVInvokedUrlCommand*)command;
 - (void)showRewardedVideo:(CDVInvokedUrlCommand*)command;
+
+- (void)resizeWebView:(CDVInvokedUrlCommand*)command;
 
 @end
