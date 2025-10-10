@@ -27,6 +27,7 @@
 
     _bannerIsAvaliable = NO;
     _bannerIsVisible = NO;
+    _bannerIsLoading = NO;
 
     _interstitialIsAvaliable = NO;
     _rewardedVideoIsAvaliable = NO;
@@ -41,12 +42,25 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+    // App lifecycle notification'larını dinle
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
 - (void)dealloc {
     // Notification observer'ları kaldır
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
     
     _banner.delegate = nil;
     _banner = nil;
@@ -153,6 +167,14 @@
         [self __setOptions:params];
     }
 
+    // Eğer banner yükleniyorsa, çakışmayı önle
+    if (_bannerIsLoading) {
+        NSLog(@"<AMRSDK> Banner zaten yükleniyor, istek iptal ediliyor");
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Banner is already loading"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
+    }
+
     // Eğer banner zaten varsa ve görünürse, önce destroy et
     if(_banner && _bannerIsVisible) {
         NSLog(@"<AMRSDK> Banner zaten görünür, önce destroy ediliyor");
@@ -164,14 +186,18 @@
         
         [self resizeContent];
         
+        // Loading flag'ini set et
+        _bannerIsLoading = YES;
+        
         // Kısa bir gecikme ile yeni banner'ı yükle
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self _loadBanner];
         });
     } else if(!_banner) {
-      NSLog(@"<AMRSDK> Banner yok load ediliyor.");
+        _bannerIsLoading = YES;
         [self _loadBanner];
     } else {
+        _bannerIsLoading = YES;
         [_banner loadBanner];
     }
 
@@ -227,6 +253,8 @@
         [_banner.bannerView removeFromSuperview];
         _banner = nil;
         _bannerIsVisible = NO;
+        _bannerIsAvaliable = NO;
+        _bannerIsLoading = NO;
 
         [self resizeContent];
     }
@@ -382,6 +410,7 @@
     _banner.delegate = self;
     _bannerIsAvaliable = NO;
     _bannerIsVisible = NO;
+    _bannerIsLoading = YES;
     [_banner loadBanner];
 }
 
@@ -443,6 +472,7 @@
 -(void)didReceiveBanner:(AMRBanner *)banner {
     _bannerIsAvaliable = YES;
     _bannerIsVisible = NO;
+    _bannerIsLoading = NO;
 
     if (_autoShowBanner)
     [self _showBanner:YES];
@@ -451,6 +481,9 @@
 }
 
 -(void)didFailToReceiveBanner:(AMRBanner *)banner error:(AMRError *)error {
+    _bannerIsLoading = NO;
+    _bannerIsAvaliable = NO;
+    
     NSString* jsonData = [NSString stringWithFormat:@"{'error': '%@'}", error.errorDescription];
 
     [self fireEvent:@"onBannerFail" withData:jsonData];
@@ -540,6 +573,32 @@
 - (void)didRewardedVideoStateChanged:(AMRRewardedVideo *)rewardedVideo state:(AMRAdState)state {
     NSString* jsonData = [NSString stringWithFormat:@"{'status': '%@'}", @(state)];
     [self fireEvent:@"onVideoStatusChanged" withData:jsonData];
+}
+
+#pragma mark - App Lifecycle Handlers
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+    NSLog(@"<AMRSDK> App became active - layout düzeltiliyor");
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_banner && _bannerIsVisible) {
+            NSLog(@"<AMRSDK> Resizing content after app became active");
+            [self resizeContent];
+            
+            UIView* parentView = _overlap ? self.webView : [self.webView superview];
+            [parentView bringSubviewToFront:_banner.bannerView];
+        }
+    });
+}
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification {
+    NSLog(@"<AMRSDK> App will enter foreground - hazırlık yapılıyor");
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_banner && _bannerIsVisible) {
+            [self resizeContent];
+        }
+    });
 }
 
 #pragma mark - Keyboard Handlers
