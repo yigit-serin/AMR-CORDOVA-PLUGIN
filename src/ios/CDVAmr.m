@@ -30,9 +30,24 @@
 
     _interstitialIsAvaliable = NO;
     _rewardedVideoIsAvaliable = NO;
+    
+    // Klavye notification'larını dinle
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (void)dealloc {
+    // Notification observer'ları kaldır
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
     _banner.delegate = nil;
     _banner = nil;
 
@@ -302,6 +317,42 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)resizeWebView:(CDVInvokedUrlCommand *)command {
+    NSLog(@"<AMRSDK> resizeWebView - Manuel olarak tetiklendi");
+    
+    // Opsiyonel gecikme parametresi (milisaniye cinsinden)
+    NSInteger delay = 0;
+    if (command.arguments.count > 0) {
+        NSNumber* delayValue = [command.arguments objectAtIndex:0];
+        if (delayValue) {
+            delay = [delayValue integerValue];
+        }
+    }
+    
+    if (delay > 0) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay / 1000.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self resizeContent];
+            
+            // Banner varsa öne getir
+            if (_banner && _bannerIsVisible) {
+                UIView* parentView = _overlap ? self.webView : [self.webView superview];
+                [parentView bringSubviewToFront:_banner.bannerView];
+            }
+        });
+    } else {
+        [self resizeContent];
+        
+        // Banner varsa öne getir
+        if (_banner && _bannerIsVisible) {
+            UIView* parentView = _overlap ? self.webView : [self.webView superview];
+            [parentView bringSubviewToFront:_banner.bannerView];
+        }
+    }
+    
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 #pragma mark - Local
 
 - (void)_loadBanner {
@@ -475,6 +526,41 @@
     [self fireEvent:@"onVideoStatusChanged" withData:jsonData];
 }
 
+#pragma mark - Keyboard Handlers
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    NSLog(@"<AMRSDK> Keyboard will show - banner varsa pozisyonu ayarla");
+    
+    // Klavye açılırken banner'ı gizle veya pozisyonunu ayarla
+    if (_banner && _bannerIsVisible && !_bannerAtTop) {
+        // Banner alttaysa, klavye açılırken banner'ı geçici olarak gizle
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_banner.bannerView setHidden:YES];
+        });
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    NSLog(@"<AMRSDK> Keyboard will hide - layout'u düzelt");
+    
+    // Klavye kapandıktan sonra layout'u düzelt
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // Banner'ı tekrar göster
+        if (_banner && _bannerIsVisible) {
+            [_banner.bannerView setHidden:NO];
+        }
+        
+        // Layout'u yeniden hesapla
+        [self resizeContent];
+        
+        // Banner'ı öne getir
+        if (_banner && _bannerIsVisible) {
+            UIView* parentView = _overlap ? self.webView : [self.webView superview];
+            [parentView bringSubviewToFront:_banner.bannerView];
+        }
+    });
+}
+
 #pragma mark - Util
 - (void)fireEvent:(NSString *)eventName withData:(NSString *)jsonData {
     NSString* event;
@@ -545,6 +631,14 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [self resizeContent];
         });
+        return;
+    }
+    
+    // Klavye açıksa resize yapma
+    CGRect keyboardFrame = [[[UIApplication sharedApplication] windows] firstObject].rootViewController.view.frame;
+    CGRect screenFrame = [[UIScreen mainScreen] bounds];
+    if (keyboardFrame.size.height < screenFrame.size.height) {
+        NSLog(@"<AMRSDK> Klavye açık, resize atlanıyor");
         return;
     }
     
