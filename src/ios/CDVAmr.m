@@ -617,6 +617,12 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification {
     NSLog(@"<AMRSDK> Keyboard will hide - layout'u düzelt");
+
+    // Banner yoksa resize yapma - oturum kaymasını önle
+    if (!_banner || !_bannerIsVisible) {
+        NSLog(@"<AMRSDK> Banner yok, klavye kapanışında resize atlanıyor");
+        return;
+    }
     
     // Klavye kapandıktan sonra layout'u düzelt
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
