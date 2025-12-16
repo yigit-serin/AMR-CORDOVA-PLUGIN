@@ -55,6 +55,7 @@ public class Amr extends CordovaPlugin {
     private static final String ACTION_SET_CAN_REQUEST_ADS = "setCanRequestAds";
     private static final String ACTION_LOAD_BANNER = "loadBanner";
     private static final String ACTION_HIDE_BANNER = "hideBanner";
+    private static final String ACTION_SHOW_BANNER = "showBanner";
     private static final String ACTION_DESTROY_BANNER = "destroyBanner";
 
     private static final String ACTION_LOAD_INTERSTITIAL = "loadInterstitial";
@@ -239,6 +240,9 @@ public class Amr extends CordovaPlugin {
 
         } else if (ACTION_HIDE_BANNER.equals(action)) {
             result = executeHideBanner(callbackContext);
+
+        } else if (ACTION_SHOW_BANNER.equals(action)) {
+            result = executeShowBannerAction(callbackContext);
 
         } else if (ACTION_DESTROY_BANNER.equals(action)) {
 
@@ -831,6 +835,11 @@ public class Amr extends CordovaPlugin {
     private PluginResult executeHideBanner(final CallbackContext callbackContext) {
 
         executeShowBanner(false, null);
+        return null;
+    }
+
+    private PluginResult executeShowBannerAction(final CallbackContext callbackContext) {
+        executeShowBanner(true, callbackContext);
         return null;
     }
 
