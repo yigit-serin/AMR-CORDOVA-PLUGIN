@@ -15,7 +15,7 @@ dependencies{
     implementation 'com.admost.sdk:amr:3.2.4'
 
     implementation 'com.google.android.gms:play-services-base:18.6.0'
-    implementation 'com.google.android.gms:play-services-ads:23.0.0'
+    implementation 'com.google.android.gms:play-services-ads:24.2.0' 
 
     // Adapters
     implementation 'com.admost.sdk:admost-adapter:1.1.9.a49'
