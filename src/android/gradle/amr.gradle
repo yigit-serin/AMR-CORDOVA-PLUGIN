@@ -25,7 +25,6 @@ dependencies{
     implementation 'com.admost.sdk:facebook-adapter:6.20.0.1.a49'
     implementation 'com.admost.sdk:tiktok-adapter:7.6.0.4.a49'
     implementation 'com.admost.sdk:unity-adapter:4.16.1.a49'
-    implementation 'com.admost.sdk:vungle-adapter:7.6.0.a49'
 
     // Dependencies
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
